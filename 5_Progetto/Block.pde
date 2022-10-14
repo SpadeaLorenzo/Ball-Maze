@@ -115,5 +115,5 @@ class Block {
     line (x1, y1, x2, y2);
     strokeWeight(4);
     stroke(0);
-  }
+  }  
 }

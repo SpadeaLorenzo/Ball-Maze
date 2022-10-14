@@ -1,25 +1,83 @@
-//global variables
+/**
+ * Number of colums of the maze.
+ */
 int cols;
+
+/**
+ *Number of rows of the maze.
+ */
 int rows;
+
+/**
+ * size of the space between the walls of the maze.
+ */
 int size =  40;
+
+/**
+ * Array of blocks.
+ */
 Block[][] blocks;
 
-//global variables for maze
+/**
+ * The current position of the block in the grid of the maze.
+ */
 Block currentMazeBlock;
+
+/**
+ * List of block used to keep track of the blocks in the maze.
+ */
 ArrayList<Block> mazeStack = new ArrayList<Block>();
+
+/**
+ * Flag to define if the generation of the maze is done.
+ */
 boolean isMazeFinished = false;
 
-//global variables for search algorithm
+/**
+ * Position of the current bolck of search in the maze.
+ */
 Block currentSearchBlock;
+
+/**
+ * Block where to start searching for the end
+ */
 Block startSearchBlock;
+
+/**
+ * Finish line block for the algorithm to find.
+ */
 Block finishSearchBlock;
+
+/**
+ * The perfect path to solve the maze.
+ */
 ArrayList<Block> actualPath = new ArrayList<Block>();
+
+/**
+ * The actual path the alorithm went through to find the perfect path.
+ */
 ArrayList<Block> searchedPath = new ArrayList<Block>();
+
+/**
+ * Flag to define if the searching algorithm has already passed that spot.
+ */
 boolean searchNeighborsAdded = false;
+
+/**
+ * List of possible blocks to visit in the solving of the maze.
+ */
 ArrayList<Block> openSet = new ArrayList<Block>();
+
+/**
+ * Flag to set true when the path to the goal is found.
+ */
 boolean pathFound = false;
 
 
+/**
+ * Sets all the variables before the loop starts.
+ * Defines the window size.S
+ */
 void setup() {
   size(600, 600);
   rows = floor(height / size);
