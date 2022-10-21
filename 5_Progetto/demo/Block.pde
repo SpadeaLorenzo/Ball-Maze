@@ -1,16 +1,42 @@
 class Block {
-  //general
+  /**
+   * The coordinate x of its position.
+   */ 
   int x;
+  
+  /**
+   * The coordinate y of its position.
+   */
   int y;
+
+  /**
+   * The row of the block.
+   */
   int thisRow;
+
+  /**
+   * The column of the block.
+   */
   int thisCol;
+
+  /**
+   * Array used to define each wall of the block.
+   */
   boolean[] walls = {true, true, true, true};
 
-  //Maze variables
+  /**
+   * Define f it's been visited already.
+   */
   boolean visitedByMaze = false;
+
+  /**
+   * List of all neighbours block of a block.
+   */
   ArrayList<Block> neighbors = new ArrayList<Block>();
 
-  //Search algorithm variables
+  /**
+   * 
+   */
   boolean visitedBySearchAlgo = false;
   ArrayList<Block> mazeNeighbors = new ArrayList<Block>();
   float g = 10000000000.0;
