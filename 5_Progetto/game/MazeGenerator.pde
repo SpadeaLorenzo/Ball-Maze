@@ -99,7 +99,7 @@ void setup() {
 }
 
 public void mazeGenerator() {
-  print(mazeStack.size());
+
   while (!isMazeFinished) { //Maze Generator Here
     fill(193, 50, 193);
     rect(currentMazeBlock.x, currentMazeBlock.y, size, size);
@@ -132,7 +132,62 @@ public void mazeGenerator() {
 void draw() {
   mazeGenerator();
   p.show();
-  p.move();
+
+  if (p.playerX >= 0 && p.playerX <= 600   && p.playerY >= 0 && p.playerY <= 600   ) {
+    //posizione del player nella griglia
+    int blockposx = floor(p.playerX/size);
+    int blockposy = floor(p.playerY/size);
+    print("X blocco:      " + blockposx + "    ");
+    print("Y blocco:      " + blockposy + "    ");
+
+    println("X : " + p.playerX);
+    println("Y : " + p.playerY);
+
+    //println(blocks[blockposx][blockposy].toString());
+
+
+    p.allowL = !blocks[blockposx][blockposy].walls[3];
+    println("LEFT : "  + p.allowL);
+
+    p.allowR = !blocks[blockposx][blockposy].walls[1];
+    println("RIGHT: "  + p.allowR);
+
+    p.allowD = !blocks[blockposx][blockposy].walls[2];
+    println("DOWN: "  + p.allowD);
+
+    p.allowU = !blocks[blockposx][blockposy].walls[0];
+    println("UP: "  + p.allowU);
+    
+    if(p.playerX >= size * blockposx && p.playerX <= blockposx * size + p.side && p.allowD && p.allowR){
+     //
+    }
+    
+    if(p.playerY >= size * blockposy && p.playerY <= blockposy * size + p.side && p.allowD && p.allowU){
+    //
+    }
+     p.move();
+
+
+
+
+
+
+
+
+    // riposiziona dentro i bordi
+    if (p.playerX > 600 -p.side) {
+      p.playerX = 600-p.side;
+    }
+    if (p.playerY > 600 -p.side) {
+      p.playerY = 600-p.side;
+    }
+    if (p.playerX < 0 ) {
+      p.playerX = 0;
+    }
+    if (p.playerY < 0 ) {
+      p.playerY = 0;
+    }
+  }
 }
 
 

@@ -1,30 +1,57 @@
 class Player {
-  float playerY;
-  float playerX;
-  int rad = 15;
+  int playerY;
+  int playerX;
+  int side = 20;
+  int speed = 5;
+   boolean allowL = true;
+   boolean allowR = true;
+   boolean allowU = true;
+   boolean allowD = true;
 
   public Player() {
-    this.playerX = rad;
-    this.playerY = rad;
+    this.playerX = 0;
+    this.playerY = 0;
   }
   public void show() {
     fill(255, 100, 100);
-    ellipse(playerX, playerY, 2*rad, 2*rad);
+    rect(playerX, playerY, side, side);
   }
-
-  /**
-   * Changes the coordinate of the player inside the window screen.
-   */
-  public void move() {
+  
+  public void move(){
+    moveRight();
+    moveLeft();
+    moveUp();
+    moveDown();
+  }
+  public void moveRight() {
     if (keyPressed == true) {
-      if      (keyCode == UP    && p.playerY- p.rad >= 0     ) p.playerY -= 5;
-      else if (keyCode == DOWN  && p.playerY+p.rad <= height)  p.playerY +=5;
-      else if (keyCode == LEFT  && p.playerX-p.rad >= 0     )  p.playerX -=5;
-      else if (keyCode == RIGHT && p.playerX+p.rad <= width )  p.playerX +=5;
+      if (keyCode == RIGHT && allowR) {
+        p.playerX += speed;
+      }
     }
   }
-}
 
-void checkCollision(){
-  
+  public void moveLeft() {
+    if (keyPressed == true) {
+      if (keyCode == LEFT && allowL) {
+        p.playerX -= speed;
+      }
+    }
+  }
+
+  public void moveUp() {
+    if (keyPressed == true) {
+      if (keyCode == UP  && allowU && allowU) {
+        p.playerY -= speed;
+      }
+    }
+  }
+
+  public void moveDown() {
+    if (keyPressed == true) {
+      if (keyCode == DOWN  && allowD) {
+        p.playerY += speed;
+      }
+    }
+  }
 }
