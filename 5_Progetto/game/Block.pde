@@ -37,13 +37,17 @@ public class Block {
   /**
    * 
    */
-  boolean visitedBySearchAlgo = false;
   ArrayList<Block> mazeNeighbors = new ArrayList<Block>();
   float g = 10000000000.0;
   float f = 10000000000.0;
   float h;
   Block prev;
 
+  /**
+   * Istantiate a block
+   * @param row the position in the rows of the grid.
+   * @param col the position in the columns of the grid.
+   */
   Block(int row, int col) {
     x = row * size;
     y = col * size;
@@ -51,6 +55,9 @@ public class Block {
     thisCol = col;
   }
 
+  /**
+   * Shows each wall of all blocks.
+   */
   void show() {
     if (walls[0]) { //draw top line
       line(x, y, x + size, y);
@@ -67,12 +74,14 @@ public class Block {
     if (visitedByMaze && !isMazeFinished) {
       noStroke();
       fill(255, 50, 255, 95);
-      //fill(0, 255, 255);
       rect(x, y, size, size);
       stroke(0);
     }
   }
 
+  /**
+   * Adds for every block its neighbours.
+   */
   void addMazeNeighbors() {
     if (!walls[3]) { //we are not in top row. Add top neighbor.
 
@@ -89,6 +98,9 @@ public class Block {
     }
   };
 
+  /**
+   * Adds a neighbour for every row and colum in the maze.
+   */
   void addNeighbors() {
     if (thisRow > 0) { //we are not in top row. Add top neighbor.
       neighbors.add(blocks[thisRow - 1][thisCol]); //top neighbor
@@ -104,6 +116,9 @@ public class Block {
     }
   };
 
+  /**
+   * returns false if there are block without neighbours.
+   */
   boolean hasUnvisitedNeightbors() {
     for (Block neighbor : neighbors) {
       if (!neighbor.visitedByMaze) {
@@ -113,6 +128,9 @@ public class Block {
     return false;
   }
 
+  /**
+   * Picks a random neighbour block.
+   */
   Block pickRandomNeighbor() {
     Block ngbr = neighbors.get(floor(random(0, neighbors.size())));
     while (ngbr.visitedByMaze) {
@@ -124,6 +142,9 @@ public class Block {
     return ngbr;
   }
 
+  /** 
+   * Draws a rect.
+   */
   void makeRect(int r, int g, int b) {
     noStroke();
     fill(r, g, b);
@@ -131,6 +152,9 @@ public class Block {
     stroke(0);
   }
   
+  /**
+   * Draws a line.
+   */
   void makeLine(Block to, int r, int g, int b) {
     strokeWeight(7);
     stroke(r, g, b);

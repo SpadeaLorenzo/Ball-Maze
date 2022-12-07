@@ -8,17 +8,23 @@ int cols;
  */
 int rows;
 
+/**
+ * Sets the difficulty of the maze.
+ */
 int difficulty = 2;
 
 /**
- * size of the space between the walls of the maze.
+ * size X of the space between the walls of the maze.
  */
 int sizeX;
-int sizeY;
-
 
 /**
- * Array of blocks.
+ * size Y of the space between the walls of the maze.
+ */
+int sizeY;
+
+/**
+ * Array of blocks used in the grid.
  */
 Block[][] blocks;
 
@@ -42,17 +48,33 @@ boolean isMazeFinished = false;
  */
 boolean searchNeighborsAdded = false;
 
+/**
+ * The player.
+ */
 Player p;
 
+/**
+ * Renders the random generated image of the maze.
+ */
 PGraphics mz;
 
+/**
+ * 0 if the menu is loaded , 1 if the game starts.
+ */
 int gameScreen = 0;
 
+/**
+ * Loads the menu of the game.
+ */ 
 void initiateGame() {
   background(0);
   textAlign(CENTER);
   text("Click to start", displayWidth/2, displayHeight/2);
 }
+
+/**
+ * Makes the game start.
+ */
 public void mousePressed() {
   // if we are on the initial screen when clicked, start the game
   if (gameScreen==0) {
@@ -60,6 +82,9 @@ public void mousePressed() {
   }
 }
 
+/**
+ * Sets the game status to "play".
+ */ 
 void startGame() {
   gameScreen=1;
 }
@@ -71,6 +96,7 @@ void startGame() {
 void setup() {
   fullScreen();
 
+  //Sets the maze's difficulty.
   switch(difficulty) {
   case 0:
     rows = 10;
@@ -105,34 +131,44 @@ void setup() {
     sizeY = displayHeight/rows;
   }
 
-
+  //creates the block grid.
   blocks = new Block[rows][cols];
-  p = new Player();
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
       blocks[i][j] = new Block(i, j);
     }
   }
 
+  //Adds neighbours for each block in the maze.
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
       blocks[i][j].addNeighbors();
     }
   }
 
+  //Istantiate the player.
+  p = new Player();
+
+  //Returns the position to the top left corner.
   currentMazeBlock = blocks[0][0];
+  //The top left corner block is set to "visited".
   currentMazeBlock.visitedByMaze = true;
+  //Sets the dimension of the image of the maze.
   mz = createGraphics(width, height);
-  frameRate(100);
+  
+  frameRate(25);
   smooth();
 }
 
+/**
+ * Generates a random maze.
+ */
 public void mazeGenerator() {
-
-  while (!isMazeFinished) { //Maze Generator Here
+  while (!isMazeFinished) { 
     fill(193, 50, 193);
     rect(currentMazeBlock.x, currentMazeBlock.y, width, height);
-    if (currentMazeBlock.hasUnvisitedNeightbors()) {
+    //Randomly creates the structure of the maze removing walls.
+    if (currentMazeBlock.hasUnvisitedNeightbors()) { 
       Block nextCurrent = currentMazeBlock.pickRandomNeighbor();
       mazeStack.add(currentMazeBlock);
       removeWalls(currentMazeBlock, nextCurrent);
@@ -145,10 +181,13 @@ public void mazeGenerator() {
       isMazeFinished = true;
     }
   }
+
+  //Begins the creation of the maze image.
   mz.beginDraw();
   background(92, 92, 92);
   strokeWeight(4);
   stroke(255, 102, 255);
+  //Shows all blocks.
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
       blocks[i][j].show();
@@ -157,18 +196,22 @@ public void mazeGenerator() {
   mz.endDraw();
 }
 
-
+/**
+ * Loop where all the graphic contents are displayed.
+ */
 void draw() {
+  //menu
   if (gameScreen == 0) {
     initiateGame();
+  // game
   } else if (gameScreen == 1) {
     mazeGenerator();
     p.show();
 
     if (p.playerX >= 0 && p.playerX <= width   && p.playerY >= 0 && p.playerY <= height   ) {
-      //posizione del player nella griglia
       int blockposx = floor(p.playerX/sizeX);
       int blockposy = floor(p.playerY/sizeY);
+
       //collision right
       boolean xright = p.playerX < (blockposx * sizeX)+ sizeX -p.side -p.speed;
       if (blocks[blockposx][blockposy].walls[1]) {
@@ -180,6 +223,7 @@ void draw() {
       } else if (!blocks[blockposx][blockposy].walls[1]) {
         p.blockR = false;
       }
+
       //collision left
       boolean xleft = p.playerX == (blockposx * sizeX);
       if (blocks[blockposx][blockposy].walls[3]) {
@@ -191,6 +235,7 @@ void draw() {
       } else if (!blocks[blockposx][blockposy].walls[3]) {
         p.blockL = false;
       }
+
       //collision up
       boolean yup = p.playerY == (blockposy * sizeY) + p.speed;
     if (blocks[blockposx][blockposy].walls[0]) {
@@ -202,6 +247,7 @@ void draw() {
     }else if(!blocks[blockposx][blockposy].walls[0]){
       p.blockU = false;
     }
+
       //collision down
       boolean ydown = p.playerY < (blockposy * sizeY)+ sizeY -p.side - p.speed;
       if (blocks[blockposx][blockposy].walls[2]) {
@@ -214,7 +260,8 @@ void draw() {
         p.blockD = false;
       }
       p.move();
-      // riposiziona dentro i bordi
+
+      //Resets the player inside the grid
       if (p.playerX > width -p.side) {
         p.playerX = width-p.side;
       }
@@ -229,13 +276,18 @@ void draw() {
       }
     }
   }
+  // debug
   println(p.playerX);
   println("X: " + sizeX);
   println("Y: " + sizeY);
 }
 
 
-
+/**
+ * Removes the Walls of the blocks to generate the maze structure.
+ * @param current the current block under check.
+ * @param next the next block to inspect.
+ */
 void removeWalls(Block current, Block next) {
   int xDistance = current.thisRow - next.thisRow;
   int yDistance = current.thisCol - next.thisCol;
