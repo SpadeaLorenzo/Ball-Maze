@@ -11,7 +11,7 @@ int rows;
 /**
  * Sets the difficulty of the maze.
  */
-int difficulty = 0;
+int difficulty;
 
 /**
  * size X of the space between the walls of the maze.
@@ -41,7 +41,7 @@ ArrayList<Block> mazeStack = new ArrayList<Block>();
 /**
  * Flag to define if the generation of the maze is done.
  */
-boolean isMazeFinished = false;  
+boolean isMazeFinished = false;
 
 /**
  * Flag to define if the searching algorithm has already passed that spot.
@@ -63,6 +63,12 @@ PGraphics mz;
  */
 int gameScreen = 0;
 
+private int rectx, recty;
+private boolean rectOver = false;
+private int rectSizeX = 200;
+private int rectSizeY = 100;
+boolean gameCompleted = false;
+
 
 End end;
 
@@ -72,7 +78,48 @@ End end;
 void initiateGame() {
   background(0);
   textAlign(CENTER);
-  text("Click to start", displayWidth/2, displayHeight/2);
+  textSize(35);
+  fill(255);
+  text("Click right to start , click on Mode to change difficulty", displayWidth/2, displayHeight/2);
+  rectx = displayWidth/2 - rectSizeX/2;
+  recty = displayHeight/2 + rectSizeY/2;  
+  stroke(255);
+  if (rectOver) {
+    fill(0);
+    rect(rectx, recty, rectSizeX, rectSizeY);
+  } else if (!rectOver) {
+    fill(0);
+    rect(rectx, recty, rectSizeX, rectSizeY);
+  }
+  fill(255);
+  text("Mode: " + difficulty, displayWidth/2 - rectSizeX/2 + rectSizeX/2,  displayHeight/2 + rectSizeY/2 + rectSizeY/2);
+
+}
+private void update() {
+  if (overMode(rectx, recty, rectSizeX, rectSizeY)) {
+    rectOver = true;
+  } else {
+    rectOver = false;
+  }
+}
+
+private boolean overMode(int x, int y, int width, int height) {
+  if (mouseX >= x && mouseX <= x+width &&
+    mouseY >= y && mouseY <= y+height) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+public void mouseClicked() {
+  if (rectOver && mouseButton == LEFT) {
+    if (difficulty == 3) {
+      difficulty = 0;
+    } else {
+      difficulty++;
+    }
+  }
 }
 
 /**
@@ -80,7 +127,7 @@ void initiateGame() {
  */
 public void mousePressed() {
   // if we are on the initial screen when clicked, start the game
-  if (gameScreen==0) {
+  if (gameScreen==0 && mouseButton == RIGHT) {
     startGame();
   }
 }
@@ -98,9 +145,13 @@ void startGame() {
  */
 void setup() {
   fullScreen();
+  //Sets the dimension of the image of the maze.
+  mz = createGraphics(width, height);
+  frameRate(60);
+  smooth();
+}
 
-
-
+private void setDifficulty() {
   //Sets the maze's difficulty.
   switch(difficulty) {
   case 0:
@@ -135,30 +186,23 @@ void setup() {
     sizeX = displayWidth/cols;
     sizeY = displayHeight/rows;
   }
-
-  //Sets the dimension of the image of the maze.
-  mz = createGraphics(width, height);
-
-
-  frameRate(60);
-  smooth();
 }
 
-private void setupPlayer(){
-  
+private void setupPlayer() {
+
   //Istantiate the player.
   p = new Player(20);
 }
 
-private void setupEnd(){
-    //Creates the end point.
+private void setupEnd() {
+  //Creates the end point.
   int endx = (int) random(cols);
   int endy = (int) random(rows);
   end = new End(endx * sizeX, endy * sizeY);
 }
-  
 
-private void setupBlocks(){
+
+private void setupBlocks() {
   //creates the block grid.
   blocks = new Block[rows][cols];
   for (int i = 0; i < rows; i++) {
@@ -177,7 +221,7 @@ private void setupBlocks(){
   //Returns the position to the top left corner.
   currentMazeBlock = blocks[0][0];
   //The top left corner block is set to "visited".
-  currentMazeBlock.visitedByMaze = true;  
+  currentMazeBlock.visitedByMaze = true;
 }
 
 /**
@@ -200,11 +244,10 @@ public void mazeGenerator() {
       isMazeFinished = true;
     }
   }
-
 }
 
-public void drawMaze(){
-  
+public void drawMaze() {
+
   //Begins the creation of the maze image.
   mz.beginDraw();
   background(92, 92, 92);
@@ -227,7 +270,8 @@ void draw() {
   //menu
   if (gameScreen == 0) {
     initiateGame();
-    
+    update();
+    setDifficulty();
     setupBlocks();
     setupEnd();
     setupPlayer();
@@ -309,6 +353,7 @@ void draw() {
     }
     if ((p.playerX >= end.blockx && p.playerX <= end.blockx+ end.size)&& (p.playerY >= end.blocky && p.playerY <= end.blocky + end.size)) {
       gameScreen = 0;
+      gameCompleted = true;
       redraw();
     }
   }
