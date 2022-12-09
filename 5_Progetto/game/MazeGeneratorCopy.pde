@@ -65,7 +65,7 @@ int gameScreen = 0;
 
 /**
  * Loads the menu of the game.
- */ 
+ */
 void initiateGame() {
   background(0);
   textAlign(CENTER);
@@ -84,7 +84,7 @@ public void mousePressed() {
 
 /**
  * Sets the game status to "play".
- */ 
+ */
 void startGame() {
   gameScreen=1;
 }
@@ -99,27 +99,27 @@ void setup() {
   //Sets the maze's difficulty.
   switch(difficulty) {
   case 0:
-    rows = 10;
-    cols = 10;
+    rows = 5;
+    cols = 5;
     sizeX = displayWidth/cols;
     sizeY = displayHeight/rows;
     break;
   case 1:
-    rows = 15;
-    cols = 8;
+    rows = 20;
+    cols = 20;
     sizeX = displayWidth/cols;
     sizeY = displayHeight/rows;
     break;
   case 2:
-    rows = 20;
-    cols = 20;
+    rows = 30;
+    cols = 30;
     sizeX = displayWidth/cols;
     sizeY = displayHeight/rows;
 
     break;
   case 3:
     rows = 40;
-    cols = 22;
+    cols = 40;
     sizeX = displayWidth/cols;
     sizeY = displayHeight/rows;
 
@@ -147,7 +147,7 @@ void setup() {
   }
 
   //Istantiate the player.
-  p = new Player();
+  p = new Player(20);
 
   //Returns the position to the top left corner.
   currentMazeBlock = blocks[0][0];
@@ -155,7 +155,7 @@ void setup() {
   currentMazeBlock.visitedByMaze = true;
   //Sets the dimension of the image of the maze.
   mz = createGraphics(width, height);
-  
+
   frameRate(25);
   smooth();
 }
@@ -164,11 +164,11 @@ void setup() {
  * Generates a random maze.
  */
 public void mazeGenerator() {
-  while (!isMazeFinished) { 
+  while (!isMazeFinished) {
     fill(193, 50, 193);
     rect(currentMazeBlock.x, currentMazeBlock.y, width, height);
     //Randomly creates the structure of the maze removing walls.
-    if (currentMazeBlock.hasUnvisitedNeightbors()) { 
+    if (currentMazeBlock.hasUnvisitedNeightbors()) {
       Block nextCurrent = currentMazeBlock.pickRandomNeighbor();
       mazeStack.add(currentMazeBlock);
       removeWalls(currentMazeBlock, nextCurrent);
@@ -203,7 +203,7 @@ void draw() {
   //menu
   if (gameScreen == 0) {
     initiateGame();
-  // game
+    // game
   } else if (gameScreen == 1) {
     mazeGenerator();
     p.show();
@@ -237,16 +237,16 @@ void draw() {
       }
 
       //collision up
-      boolean yup = p.playerY == (blockposy * sizeY) + p.speed;
-    if (blocks[blockposx][blockposy].walls[0]) {
-      if (!yup) {
+      boolean yup = p.playerY < (blockposy * sizeY) + p.speed;
+      if (blocks[blockposx][blockposy].walls[0]) {
+        if (!yup) {
+          p.blockU = false;
+        } else if (yup) {
+          p.blockU = true;
+        }
+      } else if (!blocks[blockposx][blockposy].walls[0]) {
         p.blockU = false;
-      } else if (yup) {
-        p.blockU = true;
       }
-    }else if(!blocks[blockposx][blockposy].walls[0]){
-      p.blockU = false;
-    }
 
       //collision down
       boolean ydown = p.playerY < (blockposy * sizeY)+ sizeY -p.side - p.speed;
