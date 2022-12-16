@@ -1,7 +1,7 @@
 public class End{
    int blockx;
    int blocky;
-   int size = 30;
+   int size = 25;
    
    public End(int x, int y){
      this.blockx = x;

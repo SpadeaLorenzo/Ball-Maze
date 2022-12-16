@@ -116,15 +116,25 @@ void initiateGame() {
   }
   fill(255);
   text("Mode: " + difficulty, displayWidth/2 - rectSizeX/2 + rectSizeX/2, displayHeight/2 + rectSizeY/2 + rectSizeY/2 + 10);
-  text("Top Ranks:" , 100 , 100);
+  text("Copyrights", 100, 100);
   String[] lines = loadStrings("ranking.txt");
-  println("there are " + lines.length + " lines");
-  for (int i = 0; i < lines.length; i++) {
-    
-    
-    text(lines[i] , 120 , 150 + i* 30);
-  }
+    text(lines[0], 120, 150 +  30);
 }
+
+void finalizeGame() {
+    background(0);
+    textAlign(CENTER);
+    textSize(35);
+    fill(255);
+    text("press space to return to main menu", displayWidth/2, displayHeight/2);
+    if (keyPressed == true) {
+      if (key == ' ') {
+        gameCompleted = true;
+        gameScreen = 0;
+      }
+    }
+  }
+
 
 /**
  *
@@ -309,16 +319,17 @@ void draw() {
 
   //menu
   if (gameScreen == 0) {
-    initiateGame();
-    update();
-    setDifficulty();
-    setupBlocks();
-    setupEnd();
-    setupPlayer();
-    isMazeFinished = false;
-    mazeGenerator();
-
+      initiateGame();
+      update();
+      setDifficulty();
+      setupBlocks();
+      setupEnd();
+      setupPlayer();
+      isMazeFinished = false;
+      mazeGenerator();
     // game
+   }else if(gameScreen == 2){
+      finalizeGame();
   } else if (gameScreen == 1) {
     drawMaze();
     end.show();
@@ -392,13 +403,9 @@ void draw() {
       }
     }
     if ((p.playerX >= end.blockx && p.playerX <= end.blockx+ end.size)&& (p.playerY >= end.blocky && p.playerY <= end.blocky + end.size)) {
-      gameScreen = 0;
-      for (int i = 0; i < 4; i++) {
-        if (difficulty == i) {
-          score = i * 50;
-        }
-      }
-      gameCompleted = true;
+      gameScreen = 2;
+      
+      finalizeGame();
       redraw();
     }
   }
