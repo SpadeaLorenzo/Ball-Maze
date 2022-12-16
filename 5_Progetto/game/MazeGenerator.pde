@@ -105,7 +105,7 @@ void initiateGame() {
   fill(255);
   text("Click right to start , click on Mode to change difficulty", displayWidth/2, displayHeight/2);
   rectx = displayWidth/2 - rectSizeX/2;
-  recty = displayHeight/2 + rectSizeY/2;  
+  recty = displayHeight/2 + rectSizeY/2;
   stroke(255);
   if (rectOver) {
     fill(0);
@@ -115,8 +115,15 @@ void initiateGame() {
     rect(rectx, recty, rectSizeX, rectSizeY);
   }
   fill(255);
-  text("Mode: " + difficulty, displayWidth/2 - rectSizeX/2 + rectSizeX/2,  displayHeight/2 + rectSizeY/2 + rectSizeY/2 + 10);
-
+  text("Mode: " + difficulty, displayWidth/2 - rectSizeX/2 + rectSizeX/2, displayHeight/2 + rectSizeY/2 + rectSizeY/2 + 10);
+  text("Top Ranks:" , 100 , 100);
+  String[] lines = loadStrings("ranking.txt");
+  println("there are " + lines.length + " lines");
+  for (int i = 0; i < lines.length; i++) {
+    
+    
+    text(lines[i] , 120 , 150 + i* 30);
+  }
 }
 
 /**
@@ -386,9 +393,9 @@ void draw() {
     }
     if ((p.playerX >= end.blockx && p.playerX <= end.blockx+ end.size)&& (p.playerY >= end.blocky && p.playerY <= end.blocky + end.size)) {
       gameScreen = 0;
-      for(int i = 0; i < 4; i++){
-        if(difficulty == i){
-          score = i * 50;        
+      for (int i = 0; i < 4; i++) {
+        if (difficulty == i) {
+          score = i * 50;
         }
       }
       gameCompleted = true;
