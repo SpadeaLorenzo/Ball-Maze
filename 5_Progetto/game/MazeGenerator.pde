@@ -63,14 +63,37 @@ PGraphics mz;
  */
 int gameScreen = 0;
 
+/**
+ *
+ */
 private int rectx, recty;
+
+/**
+ *
+ */
 private boolean rectOver = false;
+
+/**
+ *
+ */
 private int rectSizeX = 200;
+
+/**
+ *
+ */
 private int rectSizeY = 100;
+
+/**
+ *
+ */
 boolean gameCompleted = false;
 
-
+/**
+ *
+ */
 End end;
+
+int score = 0;
 
 /**
  * Loads the menu of the game.
@@ -92,9 +115,13 @@ void initiateGame() {
     rect(rectx, recty, rectSizeX, rectSizeY);
   }
   fill(255);
-  text("Mode: " + difficulty, displayWidth/2 - rectSizeX/2 + rectSizeX/2,  displayHeight/2 + rectSizeY/2 + rectSizeY/2);
+  text("Mode: " + difficulty, displayWidth/2 - rectSizeX/2 + rectSizeX/2,  displayHeight/2 + rectSizeY/2 + rectSizeY/2 + 10);
 
 }
+
+/**
+ *
+ */
 private void update() {
   if (overMode(rectx, recty, rectSizeX, rectSizeY)) {
     rectOver = true;
@@ -103,6 +130,9 @@ private void update() {
   }
 }
 
+/**
+ *
+ */
 private boolean overMode(int x, int y, int width, int height) {
   if (mouseX >= x && mouseX <= x+width &&
     mouseY >= y && mouseY <= y+height) {
@@ -112,6 +142,9 @@ private boolean overMode(int x, int y, int width, int height) {
   }
 }
 
+/**
+ *
+ */
 public void mouseClicked() {
   if (rectOver && mouseButton == LEFT) {
     if (difficulty == 3) {
@@ -353,6 +386,11 @@ void draw() {
     }
     if ((p.playerX >= end.blockx && p.playerX <= end.blockx+ end.size)&& (p.playerY >= end.blocky && p.playerY <= end.blocky + end.size)) {
       gameScreen = 0;
+      for(int i = 0; i < 4; i++){
+        if(difficulty == i){
+          score = i * 50;        
+        }
+      }
       gameCompleted = true;
       redraw();
     }
