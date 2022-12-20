@@ -241,7 +241,7 @@ private void setDifficulty() {
 private void setupPlayer() {
 
   //Istantiate the player.
-  p = new Player(20);
+  p = new Player();
 }
 
 private void setupEnd() {
@@ -352,7 +352,7 @@ void draw() {
       }
 
       //collision left
-      boolean xleft = p.playerX == (blockposx * sizeX);
+      boolean xleft = p.playerX <= (blockposx * sizeX) + p.speed;
       if (blocks[blockposx][blockposy].walls[3]) {
         if (!xleft) {
           p.blockL = false;

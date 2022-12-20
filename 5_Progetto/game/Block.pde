@@ -38,6 +38,10 @@ public class Block {
    * 
    */
   ArrayList<Block> mazeNeighbors = new ArrayList<Block>();
+  /**
+   * 
+   */
+  boolean visitedBySearchAlgo = false;
   float g = 10000000000.0;
   float f = 10000000000.0;
   float h;
@@ -49,8 +53,8 @@ public class Block {
    * @param col the position in the columns of the grid.
    */
   Block(int row, int col) {
-    x = row * size;
-    y = col * size;
+    x = row * sizeX;
+    y = col * sizeY;
     thisRow = row;
     thisCol = col;
   }
@@ -60,21 +64,21 @@ public class Block {
    */
   void show() {
     if (walls[0]) { //draw top line
-      line(x, y, x + size, y);
+      line(x, y, x + sizeX, y);
     }
     if (walls[1]) { //draw right line
-      line(x + size, y, x + size, y + size);
+      line(x + sizeX, y, x + sizeX, y + sizeY);
     }
     if (walls[2]) { //draw bottom line
-      line(x + size, y + size, x, y + size);
+      line(x + sizeX, y + sizeY, x, y + sizeY);
     }
     if (walls[3]) { //draw left line
-      line(x, y + size, x, y);
+      line(x, y + Y, x, y);
     }
     if (visitedByMaze && !isMazeFinished) {
       noStroke();
       fill(255, 50, 255, 95);
-      rect(x, y, size, size);
+      rect(x, y, sizeX, sizeY);
       stroke(0);
     }
   }
@@ -141,29 +145,5 @@ public class Block {
     neighbors.remove(ngbr);
     return ngbr;
   }
-
-  /** 
-   * Draws a rect.
-   */
-  void makeRect(int r, int g, int b) {
-    noStroke();
-    fill(r, g, b);
-    rect(x, y, size, size);
-    stroke(0);
-  }
-  
-  /**
-   * Draws a line.
-   */
-  void makeLine(Block to, int r, int g, int b) {
-    strokeWeight(7);
-    stroke(r, g, b);
-    int x1 = x + size / 2;
-    int y1 = y + size / 2;
-    int x2 = to.x + size / 2;
-    int y2 = to.y + size / 2;
-    line (x1, y1, x2, y2);
-    strokeWeight(4);
-    stroke(0);
-  }  
+ 
 }
