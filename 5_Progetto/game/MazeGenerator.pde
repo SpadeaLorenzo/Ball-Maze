@@ -430,7 +430,7 @@ void draw() {
     drawMaze();
     end.show();
     if (!pathFound) {
-      getSteps();
+      //getSteps();
     }
 
     p.show();
