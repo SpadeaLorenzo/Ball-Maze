@@ -145,5 +145,7 @@ public class Block {
     neighbors.remove(ngbr);
     return ngbr;
   }
- 
+ String toString(){
+   return "Block{col:" + thisCol + " row:" + thisRow +"}";
+ }
 }
