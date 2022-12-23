@@ -104,7 +104,8 @@ class Player {
       }
     }
   }
-
+ 
+ 
   /**
    * Moves the player down.
    */
