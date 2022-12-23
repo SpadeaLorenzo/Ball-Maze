@@ -174,6 +174,7 @@ void finalizeGame() {
   textAlign(CENTER);
   textSize(35);
   fill(255);
+  text("Punteggio " + score , displayWidth/2, displayHeight/2 + 150);
   text("press space to return to main menu", displayWidth/2, displayHeight/2);
   if (keyPressed == true) {
     if (key == ' ') {
