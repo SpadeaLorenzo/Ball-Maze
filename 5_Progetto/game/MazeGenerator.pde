@@ -429,9 +429,7 @@ void draw() {
   } else if (gameScreen == 1) {
     drawMaze();
     end.show();
-    if (!pathFound) {
-      //getSteps();
-    }
+    
 
     p.show();
 
@@ -503,6 +501,9 @@ void draw() {
       if (p.playerY < 0 ) {
         p.playerY = 0;
       }
+    }
+    if (!pathFound) {
+      getSteps();
     }
     if ((p.playerX >= end.blockx && p.playerX <= end.blockx+ end.size)&& (p.playerY >= end.blocky && p.playerY <= end.blocky + end.size)) {
       gameScreen = 2;
