@@ -246,54 +246,53 @@ void setup() {
   //Sets the dimension of the image of the maze.
   mz = createGraphics(width, height);
   frameRate(60);
-  
+
   smooth();
 }
 
 
 
 private void getSteps() {
-   startSearchBlock = blocks[0][0];
-   finishSearchBlock =  new Block(end.col , end.row);
-    if (!searchNeighborsAdded) { 
-      for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-          blocks[i][j].addMazeNeighbors();
-        }
+  startSearchBlock = blocks[0][0];
+  finishSearchBlock =  new Block(end.col, end.row);
+  if (!searchNeighborsAdded) {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        blocks[i][j].addMazeNeighbors();
       }
-      searchNeighborsAdded = true;
-      startSearchBlock.g = 0;
-      startSearchBlock.f = heuristic(startSearchBlock, finishSearchBlock);
-      openSet.add(startSearchBlock);
     }
-    if (openSet.size() > 0) {
-      currentSearchBlock = lowestFinOpenSet();
-      
-      if (currentSearchBlock.thisRow == finishSearchBlock.thisRow && currentSearchBlock.thisCol == finishSearchBlock.thisCol  ) {
-        pathFound = true;
-        reconstructActualPath();
-        score = actualPath.size();
-        noLoop();
-      }
-      if (!pathFound) {
-        openSet.remove(currentSearchBlock);
-        for (Block ngbr : currentSearchBlock.mazeNeighbors) {
-          float tent_gScore = currentSearchBlock.g + 1;
-          if (tent_gScore < ngbr.g) {
-            ngbr.prev = currentSearchBlock;
-            ngbr.g = tent_gScore;
-            ngbr.f = ngbr.g + heuristic(ngbr, finishSearchBlock);
-            if (!openSet.contains(ngbr)) {
-              openSet.add(ngbr);
-            }
+    searchNeighborsAdded = true;
+    startSearchBlock.g = 0;
+    startSearchBlock.f = heuristic(startSearchBlock, finishSearchBlock);
+    openSet.add(startSearchBlock);
+  }
+  if (openSet.size() > 0) {
+    currentSearchBlock = lowestFinOpenSet();
+
+    if (currentSearchBlock.thisRow == finishSearchBlock.thisRow && currentSearchBlock.thisCol == finishSearchBlock.thisCol  ) {
+      pathFound = true;
+      reconstructActualPath();
+      score = actualPath.size();
+      noLoop();
+    }
+    if (!pathFound) {
+      openSet.remove(currentSearchBlock);
+      for (Block ngbr : currentSearchBlock.mazeNeighbors) {
+        float tent_gScore = currentSearchBlock.g + 1;
+        if (tent_gScore < ngbr.g) {
+          ngbr.prev = currentSearchBlock;
+          ngbr.g = tent_gScore;
+          ngbr.f = ngbr.g + heuristic(ngbr, finishSearchBlock);
+          if (!openSet.contains(ngbr)) {
+            openSet.add(ngbr);
           }
         }
       }
-    } else if (pathFound) {
-      noLoop();
     }
+  } else if (pathFound) {
+    noLoop();
   }
-
+}
 
 private void setDifficulty() {
   //Sets the maze's difficulty.
@@ -342,7 +341,7 @@ private void setupEnd() {
   //Creates the end point.
   int endx = (int) random(cols);
   int endy = (int) random(rows);
-  end = new End(endx * sizeX, endy * sizeY ,endy , endx);
+  end = new End(endx * sizeX, endy * sizeY, endy, endx);
 }
 
 
@@ -367,7 +366,6 @@ private void setupBlocks() {
   //The top left corner block is set to "visited".
   currentMazeBlock.visitedByMaze = true;
   startSearchBlock = blocks[0][0];
-  
 }
 
 /**
@@ -388,7 +386,6 @@ public void mazeGenerator() {
       currentMazeBlock = nextCurrent;
     } else {
       isMazeFinished = true;
-
     }
   }
 }
@@ -407,9 +404,6 @@ public void drawMaze() {
     }
   }
   mz.endDraw();
- 
-
-  
 }
 /**
  * Loop where all the graphic contents are displayed.
@@ -434,13 +428,13 @@ void draw() {
   } else if (gameScreen == 1) {
     drawMaze();
     end.show();
-    if(!pathFound){
-        getSteps();    
+    if (!pathFound) {
+      getSteps();
     }
 
     p.show();
 
- 
+
 
     if (p.playerX >= 0 && p.playerX <= width   && p.playerY >= 0 && p.playerY <= height   ) {
       int blockposx = floor(p.playerX/sizeX);
@@ -556,7 +550,7 @@ ArrayList reconstructActualPath() {
 }
 
 ArrayList reconstructSearchPath() {
-  if (isMazeFinished){
+  if (isMazeFinished) {
     Block current = currentSearchBlock;
     searchedPath.add(current);
     while (current != startSearchBlock) {
